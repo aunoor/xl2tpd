@@ -24,7 +24,7 @@
 #include <string.h>
 #include <syslog.h>
 #if defined(SOLARIS)
-# include <varargs.h>
+# include <sys/varargs.h>
 #endif
 #include <netinet/in.h>
 #include "l2tp.h"

@@ -57,7 +57,7 @@ int init_network (void)
 
     flags = 1;
     setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &flags, sizeof(flags));
-#ifdef SO_NO_CHECK
+#ifdef OBSO_NO_CHECK
     setsockopt(server_socket, SOL_SOCKET, SO_NO_CHECK, &flags, sizeof(flags));
 #endif
 

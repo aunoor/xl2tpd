@@ -86,6 +86,7 @@ int getPtyMaster_ptmx(char *ttybuf, int ttybuflen)
 		  __FUNCTION__);
 	return -EINVAL;
     }
+    grantpt(fd);
 
     /* No need to call grantpt */
 
@@ -107,7 +108,8 @@ int getPtyMaster_ptmx(char *ttybuf, int ttybuflen)
     }
     ttybuf[0]='\0';
     strncat(ttybuf, tty, ttybuflen);
-
+	l2tp_log (LOG_WARNING, "%s: name of slave tty is %s\n",
+		  __FUNCTION__, ttybuf);
     return fd;
 }
 #endif
@@ -136,9 +138,11 @@ int getPtyMaster_ptm(char *ttybuf, int ttybuflen)
 
 int getPtyMaster(char *ttybuf, int ttybuflen)
 {
-    int fd;
+    int fd=-1;
 #ifndef OPENBSD
+#ifndef SOLARIS
     fd = getPtyMaster_ptmx(ttybuf, ttybuflen);
+#endif    
     char a, b;
 
     if(fd >= 0) {
