@@ -80,10 +80,11 @@ DFLAGS+= -DTRUST_PPPD_TO_DIE
 # the basic search path, and will over-ride some gcc-specific
 # include paths and cause problems.
 #
-CC=/opt/gcc-4.8.1/bin/gcc
+#CC=/opt/gcc-4.8.1/bin/gcc
+CC=gcc
 # Change /opt/sfw/ to whereever your pcap library/include files are
-OSFLAGS?= -DSOLARIS -DPPPD=\"/usr/bin/pppd\" -std=c99 -pedantic -D__EXTENSIONS__ -D_XPG4_2 -D_XPG6 -I/opt/sfw/include
-LDLIBS?= -lnsl -lsocket
+OSFLAGS= -DSOLARIS -DPPPD=\"/usr/bin/pppd\" -std=c99 -pedantic -D__EXTENSIONS__ -D_XPG4_2 -D_XPG6 -I/opt/sfw/include
+LDLIBS= -lnsl -lsocket -lm
 
 # Uncomment the next two lines for OpenBSD
 #
@@ -97,7 +98,7 @@ LDLIBS?= -lnsl -lsocket
 
 IPFLAGS?= -DIP_ALLOCATION
 
-CFLAGS+= $(DFLAGS) -Os -Wall -DSANITY $(OSFLAGS) $(IPFLAGS)
+CFLAGS= $(DFLAGS) -Os -Wall -DSANITY $(OSFLAGS) $(IPFLAGS)
 HDRS=l2tp.h avp.h misc.h control.h call.h scheduler.h file.h aaa.h md5.h
 OBJS=xl2tpd.o pty.o misc.o control.o avp.o call.o network.o avpsend.o scheduler.o file.o aaa.o md5.o
 SRCS=${OBJS:.o=.c} ${HDRS}
@@ -107,7 +108,7 @@ LDLIBS+= -lm
 EXEC=xl2tpd
 #CONTROL_EXEC=xl2tpd-control
 
-PREFIX?=/usr/local
+PREFIX?=/opt/local
 SBINDIR?=$(DESTDIR)${PREFIX}/sbin
 BINDIR?=$(DESTDIR)${PREFIX}/bin
 MANDIR?=$(DESTDIR)${PREFIX}/share/man

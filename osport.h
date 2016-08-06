@@ -38,8 +38,10 @@
 #if !defined(LINUX)
 
 /* Declare empty structure to make code portable and keep simple */
+#if !defined(SOLARIS)
 struct in_pktinfo {
 };
+#endif 
 
 #endif
 
