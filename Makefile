@@ -47,14 +47,14 @@
 # trust pppd. This work around will be removed in the near future.
 
 # DFLAGS= -g -DDEBUG_HELLO -DDEBUG_CLOSE -DDEBUG_FLOW -DDEBUG_PAYLOAD -DDEBUG_CONTROL -DDEBUG_CONTROL_XMIT -DDEBUG_FLOW_MORE -DDEBUG_MAGIC -DDEBUG_ENTROPY -DDEBUG_HIDDEN -DDEBUG_PPPD -DDEBUG_AAA -DDEBUG_FILE -DDEBUG_FLOW -DDEBUG_HELLO -DDEBUG_CLOSE -DDEBUG_ZLB -DDEBUG_AUTH
-DFLAGS?= -DDEBUG_PPPD -DTRUST_PPPD_TO_DIE
-
+DFLAGS?= -DDEBUG_PPPD -DDEBUG_AAA -DDEBUG_AUTH
+DFLAGS+= -DTRUST_PPPD_TO_DIE
 # Uncomment the next line for Linux. KERNELSRC is needed for if_pppol2tp.h,
 # but we use a local copy if we don't find it.
 #
 #KERNELSRC=/lib/modules/`uname -r`/build/
-KERNELSRC?=./linux
-OSFLAGS?= -DLINUX -I$(KERNELSRC)/include/
+#KERNELSRC?=./linux
+#OSFLAGS?= -DLINUX -I$(KERNELSRC)/include/
 #
 # Uncomment the following to use the kernel interface under Linux
 # This requires the pppol2tp-linux-2.4.27.patch patch from contrib
@@ -62,7 +62,7 @@ OSFLAGS?= -DLINUX -I$(KERNELSRC)/include/
 # are packages seperately (eg kernel-headers on Fedora)
 # Note: 2.6.23+ support still needs some changes in the xl2tpd source
 #
-OSFLAGS+= -DUSE_KERNEL
+#OSFLAGS+= -DUSE_KERNEL
 #
 #
 # Uncomment the next line for FreeBSD
@@ -80,10 +80,10 @@ OSFLAGS+= -DUSE_KERNEL
 # the basic search path, and will over-ride some gcc-specific
 # include paths and cause problems.
 #
-#CC?=gcc
+CC=/opt/gcc-4.8.1/bin/gcc
 # Change /opt/sfw/ to whereever your pcap library/include files are
-#OSFLAGS?= -DSOLARIS -DPPPD=\"/usr/bin/pppd\" -std=c99 -pedantic -D__EXTENSIONS__ -D_XPG4_2 -D_XPG6 -I/opt/sfw/include
-#OSLIBS?= -lnsl -lsocket
+OSFLAGS?= -DSOLARIS -DPPPD=\"/usr/bin/pppd\" -std=c99 -pedantic -D__EXTENSIONS__ -D_XPG4_2 -D_XPG6 -I/opt/sfw/include
+LDLIBS?= -lnsl -lsocket
 
 # Uncomment the next two lines for OpenBSD
 #
@@ -105,13 +105,12 @@ CONTROL_SRCS=xl2tpd-control.c
 #LIBS= $(OSLIBS) # -lefence # efence for malloc checking
 LDLIBS+= -lm
 EXEC=xl2tpd
-CONTROL_EXEC=xl2tpd-control
+#CONTROL_EXEC=xl2tpd-control
 
 PREFIX?=/usr/local
 SBINDIR?=$(DESTDIR)${PREFIX}/sbin
 BINDIR?=$(DESTDIR)${PREFIX}/bin
 MANDIR?=$(DESTDIR)${PREFIX}/share/man
-
 
 all: $(EXEC) pfc $(CONTROL_EXEC)
 
