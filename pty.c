@@ -140,9 +140,7 @@ int getPtyMaster(char *ttybuf, int ttybuflen)
 {
     int fd=-1;
 #ifndef OPENBSD
-#ifndef SOLARIS
     fd = getPtyMaster_ptmx(ttybuf, ttybuflen);
-#endif    
     char a, b;
 
     if(fd >= 0) {

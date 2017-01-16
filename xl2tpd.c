@@ -40,6 +40,7 @@
 #include <fcntl.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <stropts.h>
 #include "l2tp.h"
 
 struct tunnel_list tunnels;
@@ -479,6 +480,10 @@ int start_pppd (struct call *c, struct ppp_opts *opts)
             l2tp_log (LOG_WARNING, "unable to open tty %s, cannot start pppd", tty);
             return -EINVAL;
         }
+#ifdef SOLARIS
+        ioctl(fd2, I_PUSH, "ptem");       /* push ptem */
+        ioctl(fd2, I_PUSH, "ldterm");     /* push ldterm*/
+#endif
         stropt[pos++] = strdup(tty);
     }
 
@@ -496,7 +501,7 @@ int start_pppd (struct call *c, struct ppp_opts *opts)
 
 #ifdef DEBUG_PPPD
     l2tp_log (LOG_DEBUG, "%s: I'm running: \n", __FUNCTION__);
-    for (x = 0; stropt[x]; x++)
+    for (int x = 0; stropt[x]; x++)
     {
         l2tp_log (LOG_DEBUG, "\"%s\" \n", stropt[x]);
     };
@@ -506,7 +511,6 @@ int start_pppd (struct call *c, struct ppp_opts *opts)
 #else
     c->pppd = fork ();
 #endif
-
     if (c->pppd < 0)
     {
         /* parent */
